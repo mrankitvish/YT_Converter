@@ -1,0 +1,118 @@
+from tkinter import *
+from pytube import YouTube
+from pytube import Playlist
+from tkinter import filedialog
+import tkinter.messagebox as tmsg
+
+
+def downloading():
+    value=var.get()
+    global video
+    if value==1:
+        url=YouTube(str(link.get()))
+        video = url.streams.get_by_itag('22')
+        if video==None:
+            tmsg.showerror("Connection Error!","Server Can't find!\n Try again or select another quality")
+        else:
+            file_path =  filedialog.askdirectory()
+            video.download(file_path)
+            tmsg.showinfo("Downloading Complete!",f"{url.title}")    
+        # tmsg.showinfo("downloading","For 720p")
+
+
+    elif value==2:
+        
+        url=YouTube(str(link.get()))
+        video = url.streams.get_by_itag('18')
+        
+        if video==None:
+            tmsg.showerror("Connection Error!","Server Can't find!\n Try again or select another quality")
+        else:
+            file_path =  filedialog.askdirectory()
+            video.download(file_path)
+            tmsg.showinfo("Downloading Complete!",f"{url.title}")    
+        # tmsg.showinfo("downloading","For 360p")
+
+
+    elif value==3:
+        url=YouTube(str(link.get()))
+        video = url.streams.get_by_itag('140')
+        
+        if video==None:
+            tmsg.showerror("Connection Error!","Server Can't find!\n Try again or select another quality")
+        else:
+            file_path =  filedialog.askdirectory()
+            video.download(file_path)
+            tmsg.showinfo("Downloading Complete!",f"{url.title}")  
+        # tmsg.showinfo("downloading","For MP3")
+    
+
+    elif value==4:
+        url=YouTube(str(link.get()))
+        video = url.streams.first()
+        
+        if video==None:
+            tmsg.showerror("Connection Error!","Server Can't find!\n Try again or select another quality")
+        else:
+            file_path =  filedialog.askdirectory()
+            video.download(file_path)
+            tmsg.showinfo("Downloading Complete!",f"{url.title}")   
+#playlist download
+    elif value==0:
+        url=Playlist(str(link.get()))
+        # video.download(file_path)
+        file_path =  filedialog.askdirectory()
+        for video in url.videos:
+            video.streams.first().download(file_path)
+        tmsg.showinfo("Downloading Complete!",f"{url.title}")  
+                
+def quit_app():
+    ans=tmsg.askyesno("YouTube Video Downloader", "Do you want to close?")
+    # print(ans)
+    if ans==True:
+        root.destroy()
+
+# def HTD():
+#     tmsg.askquestion("YouTube Video Downloader","")
+
+# def about_us():
+#     tmsg.askquestion("YouTube Video Downloader","")
+
+# def help_us():
+#     tmsg.askquestion("YouTube Video Downloader","")
+root = Tk()
+root.geometry('500x300')
+root.resizable(0,0)
+root.title("YouTube Video Downloader")
+# root.wm_iconbitmap("yt_icon.ico")
+
+Label(root,text = 'Youtube Video Downloader', font ='comicsanms 20 bold').pack()
+        
+
+##enter link
+link = StringVar()
+
+Label(root, text = 'Paste Link Here:', font = 'ariel 15 bold').place(x= 180 , y = 60)
+Entry(root, width = 70,textvariable = link).place(x = 35, y = 100)
+
+var=IntVar()
+# var.set(radio)
+Radiobutton(root, text="720p", variable=var,value=1).place(x=170,y=150)
+Radiobutton(root, text="360p", variable=var,value=2).place(x=230,y=150)
+Radiobutton(root, text="MP3", variable=var,value=3).place(x=290,y=150)
+Radiobutton(root, text="Playlist", variable=var,value=0).place(x=350,y=150)
+Radiobutton(root, text="Auto High Quality", variable=var,value=4).place(x=50,y=150)
+# Radiobutton(root, text="MP3", variable=var,value=4).place(x=290,y=150)
+
+
+Button(root,text = 'DOWNLOAD',fg='white' ,font = 'comicsanms 15 bold' ,bg = 'blue', padx = 2, command = downloading).place(x=180 ,y = 200)
+Button(root,text = 'Close',fg='white' ,font = 'comicsanms 10 bold' ,bg = 'red', padx = 5, command = quit_app).place(x=224 ,y = 255)
+Label(root, text="©Copyright: AV Soft, All rights reserved",font = 'ariel 8',fg="grey").place(x=299 ,y = 280)
+# mainmenu=Menu(root)
+# m1=Menu(mainmenu,tearoff=0)
+# m1.add_command(label="About us",command=about_us)
+# m1.add_command(label="Help!",command=help_us)
+# m1.add_command(label="How to Download",command=HTD)
+# mainmenu.add_cascade(label="Help",menu=m1)
+
+root.mainloop()
